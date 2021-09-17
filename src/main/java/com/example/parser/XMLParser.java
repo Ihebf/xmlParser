@@ -71,7 +71,55 @@ public class XMLParser {
         }
         return null;
     }
+    public boolean update(Object obj) throws Exception {
+        boolean b = false;
+        int id =0;
+        try {
+            id= Integer.parseInt((String) executerMethode(obj,"getId",null));
+        }catch (Exception e){
+            id= (int) executerMethode(obj,"getId",null);
 
+        }
+        for(int i=0;i<pTab.size();i++){
+            Object a = pTab.get(i);
+            System.out.println("-----------");
+            System.out.println(showFields(a));
+            int idd=0;
+            try {
+                idd= Integer.parseInt((String) executerMethode(a,"getId",null));
+            }catch (Exception e){
+                idd= (int) executerMethode(a,"getId",null);
+
+            }
+            if(id==idd){
+
+                for (String att:showFields(obj)) {
+                    System.out.println(att);
+
+                    if(executerMethode(obj,"get"+firstCharUpperCase(att),null) != null && att !="id"){
+                        try{
+                            String at = (String) executerMethode(obj,"get"+firstCharUpperCase(att),null);
+                            executerMethode(a,"set"+firstCharUpperCase(att), new Object[]{at});
+                        }catch (Exception e){
+                            try{
+                                Integer at = (Integer) executerMethode(obj,"get"+firstCharUpperCase(att),null);
+                                System.out.println(at);
+                                executerMethode(a,"set"+firstCharUpperCase(att), new Object[]{Integer.toString(at)});
+                            }catch (Exception e1){
+                                Integer at = (Integer) executerMethode(obj,"get"+firstCharUpperCase(att),null);
+                                System.out.println(at);
+                                executerMethode(a,"set"+firstCharUpperCase(att), new Object[]{at.intValue()});
+                            }
+                        }
+                    }
+                }
+
+                b=true;
+            }
+        }
+        writeXml(filePath,this.listToXml(pTab));
+        return b;
+    }
     public String getChildElementByTagName(String baliseName,String chaine){
         Pattern p = Pattern.compile("<"+baliseName+">(.+?)</"+baliseName+">", Pattern.DOTALL);
         Matcher m = p.matcher(chaine);
@@ -175,7 +223,6 @@ public class XMLParser {
                  idd= Integer.parseInt((String) executerMethode(a,"getId",null));
             }catch (Exception e){
                 idd= (int) executerMethode(a,"getId",null);
-
             }
             if(id==idd){
                 pTab.remove(pTab.get(i));
@@ -303,7 +350,8 @@ public class XMLParser {
 
         System.out.println(xmlParser.getXMLFile());
 
-        xmlParser.delete(1);
+       // xmlParser.delete(1);
+        xmlParser.update(new Student(1,"name1",5));
     }
 
 }
