@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 public class XMLParser {
 
+    private static ArrayList<String> objects=new ArrayList<>();
     private String filePath;
     private static ArrayList<Object> pTab = new ArrayList<>();
 
@@ -162,8 +163,22 @@ public class XMLParser {
         }
         m.reset();
 
+
         ArrayList<String> a = (ArrayList<String>) attribut.stream().distinct().collect(Collectors.toList());
-        Object obj = createObject(baliseName,a);
+        Object obj=null;
+        boolean b = true;
+        for (String o:objects){
+            if(o.equals(baliseName)){
+                b=false;
+                break;
+            }
+        }
+        if(b) {
+            objects.add(baliseName);
+            obj = createObject(baliseName, a);
+        }
+        else
+            obj =Class.forName(baliseName).getConstructor().newInstance();
 
         while (m.find()){
             String g = m.group(1);
@@ -306,7 +321,12 @@ public class XMLParser {
 
         f.setAccessible(true);
         final Unsafe unsafe = (Unsafe) f.get(null);
-        final Class aClass = unsafe.defineClass(fullClassName, bytes, 0, bytes.length,ClassLoader.getSystemClassLoader(),null);
+        Class aClass = null;
+        try {
+            aClass = unsafe.defineClass(fullClassName, bytes, 0, bytes.length,ClassLoader.getSystemClassLoader(),null);
+        }catch (Exception e){
+            return null;
+        }
 
         final Object o = aClass.newInstance();
         //System.out.println(o);
@@ -337,6 +357,7 @@ public class XMLParser {
         XMLParser xmlParser = new XMLParser("C:\\Users\\ihfarhat\\Desktop\\ex.txt");
         //System.out.println(xmlParser.getXMLFile());
         List<?> list1 = xmlParser.getElementsByTagName("Student");
+
         List<?> list2 = xmlParser.getElementsByTagName("Employee");
         List<?> list3 = xmlParser.getElementsByTagName("Guest");
 
