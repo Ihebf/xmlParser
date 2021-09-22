@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 public class XMLParser {
 
-    private static ArrayList<String> objects=new ArrayList<>();
     private String filePath;
     private static ArrayList<Object> pTab = new ArrayList<>();
 
@@ -165,21 +164,8 @@ public class XMLParser {
 
 
         ArrayList<String> a = (ArrayList<String>) attribut.stream().distinct().collect(Collectors.toList());
-        Object obj=null;
-        boolean b = true;
-        for (String o:objects){
-            if(o.equals(baliseName)){
-                b=false;
-                break;
-            }
-        }
-        if(b) {
-            objects.add(baliseName);
-            obj = createObject(baliseName, a);
-        }
-        else
-            obj =Class.forName(baliseName).getConstructor().newInstance();
 
+        Object obj= createObject(baliseName,a);
         while (m.find()){
             String g = m.group(1);
             Matcher m1 = p1.matcher(g);
