@@ -12,6 +12,6 @@ La methode getChildElementByTagName:
   Input: Le nom de la balise du type String
          un bloc xml de type String
   Output: Le contenu de ce bloc en String
-  Description: En donnant un bloc xml avec la balise name, la méthode renverra tout les données dans ce bloc
+  Description: En donnant un bloc xml avec la balise name, la méthode renverra tout les données dans ce bloc 
   
   
