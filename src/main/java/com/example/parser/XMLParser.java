@@ -323,9 +323,9 @@ public class XMLParser {
         String s ="<Personne>\n";
         for (Object l:list) {
             ArrayList<String> arrayList = (ArrayList<String>) showFields(l);
-            s+="<"+l.getClass().getSimpleName()+">\n";
+            s+="    <"+l.getClass().getSimpleName()+">\n";
             for (String ss:arrayList ){
-                s+="<"+ss+">"+executerMethode(l,"get"+firstCharUpperCase(ss),null)+"</"+ss+">\n";
+                s+="        <"+ss+">"+executerMethode(l,"get"+firstCharUpperCase(ss),null)+"</"+ss+">\n";
             }
             s+="</"+l.getClass().getSimpleName()+">\n";
         }
